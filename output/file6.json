@@ -1,0 +1,2765 @@
+{
+  "title": "arXiv:2403.17213v1  [cs.CV]  25 Mar 2024",
+  "outline": [
+    {
+      "level": "H2",
+      "text": "AnimateMe: 4D Facial Expressions via Diffusion",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "Dimitrios Gerogiannis, Foivos Paraperas Papantoniou, Rolandos Alexandros",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "Potamias, Alexandros Lattas, Stylianos Moschoglou, Stylianos Ploumpis, and",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "In the field of computer graphics and human-computer interaction, 3D face mod-",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "eling [4, 5, 7, 38, 39, 52] and animation are becoming increasingly crucial. With",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "the evolution of digital interactions, there is a rising demand for realistic 3D",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "avatars that can generate emotions with high fidelity. While controllable and",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "dynamic 2D facial expression generation is well-studied [9, 18, 32, 53, 56, 58], its",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "3D counterpart remains unexplored due to its inherent complexity. This lack of",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "research emphasizes the need for advancements in 4D facial expression gener-",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "ation. While much of the 3D face animation domain focuses on speech anima-",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "tion [1, 13, 19, 25, 31, 35\u201337, 42, 48, 50, 51, 54, 59], research on expression anima-",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "tion [33,40] is limited. Although diffusion models have been sparingly applied to",
+      "page": 1
+    },
+    {
+      "level": "H4",
+      "text": "facial speech animation techniques [1,31,35,48,50], the results have shown consid-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "erable promise. In contrast, these models have been extensively and successfully",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "employed in the field of 3D human motion, demonstrating their effectiveness and",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "versatility [2,11,14,44,49,61]. Despite the proven success of diffusion models in",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "3D animation, their application in 4D facial expression remains unexplored. This",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "gap in the literature inspired us to develop our method, aiming to investigate",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "their potential in this domain.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "However, typical diffusion model architectures are challenging to apply di-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "rectly to 3D structures. Using meshes as our 3D face representation, we introduce",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "the first 3D diffusion process tailored to operate directly within the mesh space,",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "enabling the application of diffusion models for 4D facial expression generation.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "Our method achieves this by employing Graph Neural Networks (GNNs) as de-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "noising diffusion models. This novel approach paves the way for broader utiliza-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "tion of GNNs in diffusion processes for mesh generation. Moreover, regarding",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "temporal coherence in animations, our method diverges from the traditional",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "diffusion models methods. Conventional video approaches [6, 21, 22, 24, 45, 62]",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "typically handle temporal dependencies via architectural adjustments incorpo-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "rating temporal modules, generating frames collectively. In contrast, inspired",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "by ideas presented in [26, 29, 57], our approach modifies the traditional DDPM",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "algorithm by introducing a straightforward yet effective sampling strategy tai-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "lored to our specific challenge, termed consistent noise sampling. This intuitive",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "sampling strategy not only solidifies temporal coherence but also significantly",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "improves the generation time.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "Our method capitalizes on diffusion models, presenting a marked divergence",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "from the competition. Although some methods have been explored for 4D fa-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "cial expression generation [33,40], they often fall short in producing high-fidelity",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "extreme expressions, while our method successfully accomplishes it. This ad-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "vantage is primarily attributed to the diffusion models\u2019 capability to handle",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "complex distributions, such as the extreme deformations accompanying intense",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "facial expressions. The strength of our model is further enhanced by utilizing the",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "entirety of the mesh space. This offers superior capturing capabilities compared",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "to traditional blendshapes [10] and landmarks [33].",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "In summary, our work offers the following key contributions:",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "\u2013 The first, to the best of our knowledge, diffusion process formulation oper-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "ating directly on the mesh space with GNNs proposed as denoising models.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "\u2013 The first, to the best of our knowledge, fully data-driven approach to cus-",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "tomizable 4D facial expressions, utilizing diffusion models.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "\u2013 A dynamic diffusion models sampling strategy for 3D facial animation, that",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "is extended to both geometry and texture generation.",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "3D Facial Animation Generation",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "Since the introduction of the seminal 3DMMs [4], multiple methods [5] have",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "been proposed to model facial animation using expression blendshapes [10,12].",
+      "page": 2
+    },
+    {
+      "level": "H4",
+      "text": "Nonetheless, they train on static 3D meshes, and can only rely on unrealistic",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "linear interpolation to represent 3D facial motion.",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Several methods have tried to tackle the limitations of 3D facial motion",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "synthesis by utilizing either audio or speech features. In an early attempt to",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "model speech features along with facial motion, the authors of [25] presented a",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "subject-specific model to produce facial motion from audio but faced limitations",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "in adapting to varied speakers. A similar method was proposed in [13] where a",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "static neutral mesh of a given identity was fed to the network for animation based",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "on speech input features showcasing flexibility across diverse speakers. Several",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "other approaches were built on top, that utilize RNNs along with facial action",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "units [37] and LSTMs [54]. Following studies significantly improved the realism",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "of 3D speech animation by disentangling emotion from speech [36, 42], while",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Transformer-based approaches [19,51,59] have demonstrated promising results as",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "well. Only very recently, a few works have focused on animating a 3D facial mesh",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "via a diffusion process coupled with a voice input signal [1,31,35,48,50]. Most of",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "these works deal with denoising and generating animations based on input speech",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "that is later mapped into blendshape expression parameters [35, 48]. Only [50]",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "works directly on the mesh domain utilizing a motion decoder. Even though this",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "line of work is promising for facial animation based on speech input, none of the",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "aforementioned methods deal with labeled (guided) expression generation.",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Guided 4D expression generation is an understudied problem with only a",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "few methods able to achieve satisfactory results. The work proposed in [40] first",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "attempted guided 4D expression generation on the 4DFAB dataset [12], combin-",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "ing LSTMs with GNNs. It notably addressed the challenge of animating extreme",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "expressions for the first time. While this work utilizes a GNN architecture as a",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "decoder, similar to our method, our approach differentiates itself by adopting",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "a mesh diffusion process, thereby enhancing the expression capturing capabili-",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "ties. Similar to this research direction, the authors in [33] proposed a two-stage",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "framework employing a sparse-to-dense decoder mapping sparse 3D facial land-",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "mark displacements to dense ones for motion generation, complemented by a",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "GAN architecture for landmark sequence creation driven by expression labels.",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Although effective, this method falls short of capturing extreme expressions and",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "detailed facial features as efficiently as our approach, as demonstrated in our",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "experiments section. This discrepancy is likely due to the superiority of diffusion",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "models over GANs [15], and our comprehensive use of the entire mesh rather",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "than just landmarks.",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Diffusion Models for Animation",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "Since the introduction of diffusion models in the 2D image domain [23,47], the",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "computer vision literature witnessed staggering advancements in image and video",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "synthesis when compared to previous GAN-based approaches [15, 43]. Regard-",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "ing 2D animation, [24] was the first work to extend diffusion models to video",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "synthesis by adapting the traditional denoising architecture to accommodate",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "3D data. Following this pioneering work, many studies focused on maintain-",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "ing temporal coherence in animation, while achieving high resolution and frame",
+      "page": 3
+    },
+    {
+      "level": "H4",
+      "text": "rate through a variety of methods. These include integrating temporal modules,",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "refining denoising architectures for video data, implementing cascaded super-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "resolution techniques, extending text-to-image models to videos, extending the",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "latent diffusion model paradigm to video diffusion models, or even combinations",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "of these approaches, often leveraging the strengths of each to achieve superior",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "outcomes [6,21,22,45,62]. The unique approaches of [29] and [26] diverge from",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "the typical approaches to handling temporal coherence. The authors of [29] in-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "novated by treating video frames as non-independent instances by refining the",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "DDPM paradigm to introduce a shared base noise and a time-variant residual",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "noise across frames. Similarly, [26] departs from traditional random sampling by",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "enforcing motion dynamics between the latent codes. Together, these two ap-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "proaches emphasize the benefits of using consistent noise patterns across frames",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "serving as inspiration for our work.",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "Extending diffusion models to generate animation in the 3D domain is an",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "ambitious task given the vast amounts of 3D data required over time and the",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "inherently greater complexity of 3D structures compared to images. Recent ef-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "forts have leveraged these models to generate motion for 3D models. Apart from",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "the few diffusion-based 3D speech animation methods referenced in the previous",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "subsection, the vast majority of such endeavors are focused on generating 3D",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "human motion, which is a well-studied research area. Numerous diffusion based",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "methods ranging from body motion [2, 11, 14, 44, 49, 61] to hand gestures mo-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "tions [3, 60], have emerged in the literature. While most of these methods are",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "text-conditioned, others utilize different conditionings such as 3D landmarks [16]",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "and 3D object points [27]. Nevertheless, none of the aforementioned methods",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "tackles the problem of labeled expression animation which is an understudied",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "problem due to the scarcity of 4D facial expression data, unlike speech and hu-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "man motion data.",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "Diffusion Models on the 3D Space",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "Although 2D diffusion models have been extensively explored and well-understood,",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "particularly in terms of denoising model architectures and their applications, the",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "exploration in the 3D domain lags behind because of the complexities involved in",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "3D modeling. Only a handful of studies have explored diffusion processes directly",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "on 3D structures, and these primarily work on point clouds. The pioneering work",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "of [28] adapted traditional diffusion models for point clouds introducing a proba-",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "bilistic approach rooted in thermodynamic diffusion processes. Similarly, another",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "approach [63] combined diffusion models with point-voxel representations for",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "shape generation. Recent methods have followed more sophisticated approaches",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "by operating on the 3D latent space [30,55] taking inspiration from [43]. The last",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "two methods can also generate meshes, but they achieve this by reconstructing",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "surfaces from the generated point clouds and lack detail [30, 55]. To the best",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "of our knowledge, no existing diffusion model directly operates on mesh points",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "while preserving their inherent connectivity to generate meshes.",
+      "page": 4
+    },
+    {
+      "level": "H4",
+      "text": "Our method learns to animate a mesh of neutral expression towards a target",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "expression, guided by a signal that indicates both the progression and intensity",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "of the resulting expression animation, enabling extensive customization.",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "To implement the animation mechanism, our framework introduces a novel",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "mesh diffusion process tailored for fixed topology meshes. The frames of each",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "animation used for training are processed by expressing them as deformations",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "from the neutral mesh. Interestingly, while our method model is dynamic, our",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "diffusion model is trained in a conventional static manner. A key feature is our",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "intuitive consistent noise sampling strategy, designed specifically for our problem.",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "This not only ensures temporal coherence, resulting in smooth animations but",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "also accelerates the generation process. Fig. 1 provides an overview of our frame",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "generation method, while Fig. 2 depicts our consistent noise sampling strategy. In",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "the following subsections, we detail each component and explain the innovations",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "of our method.",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "Formulating Diffusion Processes on the Mesh Space",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "Our mesh diffusion formulation builds upon [28]. The core idea of this work is",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "to tailor the diffusion process specifically for point clouds. The objective is to",
+      "page": 5
+    },
+    {
+      "level": "H4",
+      "text": "reconstruct a point cloud X (0)  of a desired shape, defined by a shape latent",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "z \u2208 R N \u00d7 1 . This latent is derived from an encoder z = E \u03d5 ( X (0) ) , and the reverse",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "diffusion process is conditioned on it. Starting from pure noise, the method",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "progresses to generate the point cloud.",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "Consistent with traditional DDPMs, the training objective is to maximize the",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "data\u2019s log-likelihood, E [log p \u03b8 ( X (0) )] . By leveraging the variational lower bound",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "(ELBO) and further derivations, a simplified training objective is formulated,",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "akin to the approach presented in [23]:",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "L ( \\ b m",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "eta  } ,  \\ b m  { \\ p",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "= \\ s u m  _ {i = 1 } ^ {N} \\l",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "Fixed topology meshes are the dominant representation of human faces [17].",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "Hence, our objective is to adapt the point cloud diffusion process to operate",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "directly on such meshes. However, challenges arise when examining the original",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "point cloud diffusion process for mesh generation. The primary issue arises from",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "the integration of the loss function, which is focused on denoising at a point",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "level, with the denoising model \u03f5 \u03b8 ( x i ( t ) , t, z ) , characterized by its point cloud",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "MLP architecture. The latter treats point clouds as unordered sets due to their",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "inherent permutation invariance. Recognizing that meshes essentially represent",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "strongly structured point clouds defined by their connectivity, such a property",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "becomes a problem, since order and structure are crucial for them. Moreover,",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "point cloud MLPs initially process individual points independently and only",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "aggregate this data in subsequent layers, leading to challenges in accurately",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "capturing the finer local details found in meshes.",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "To facilitate mesh generation, we employ GNNs as denoising diffusion mod-",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "els in a novel manner. This adaptation leads to a structure-aware, sophisticated",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "diffusion process that not only effectively denoises, but also preserves the con-",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "nectivity. More specifically, we replace the point cloud MLP denoising model",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "with a Spiral Convolutional Network (SCN) [8,20]. This replacement is denoted",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "by s \u03b8 ( x i ( t ) , t, c ) where c represents the conditioning of the model, serving a role",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "similar to the shape latent z in the original method.",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "Training in Line with Static Diffusion Models",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "Typically, dynamic diffusion models that generate modalities, such as videos,",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "train on the entire sequence of animation frames, operating in a whole-animation",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "fashion. In contrast, our approach to training is one frame at a time. Specifically,",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "for a given animation X = { x i : i = 0 , . . . , K \u2212 1 } , we select a single frame x i \u2208",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "R N \u00d7 3 . We then extract the expression stage information for this frame, denoted",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "as e i \u2208 R 1 \u00d7 M , where M represents the number of possible expression categories.",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "This vector e i encodes both the category and intensity of the expression, derived",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "from the animation\u2019s expression signal E = { e i : i = 0 , . . . , K \u2212 1 } . Additionally,",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "we obtain the neutral mesh associated with the animation, denoted as x 0 . We",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "use it to express the current frame x i as deformations relative to it, yielding",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "d i = x i \u2212 x 0 with d i \u2208 R N \u00d7 3 . From there, training follows the paradigm of",
+      "page": 6
+    },
+    {
+      "level": "H4",
+      "text": "static diffusion models with the denoising model conditioned on the expression",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "stage and timestep, using the following loss function:",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "L ( \\",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "the t a  } ) = \\ s u m",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "} ^ { N } \\ l ef t  \\",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "A significant advantage of our approach is its computational efficiency. Tradi-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "tional methods require loading entire animation sequences for training, which is",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "computationally demanding, especially with large meshes. Our frame-by-frame",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "approach avoids this, enabling high-resolution mesh training without perfor-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "mance limitations.",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "Using the Entire Mesh versus Relying on Landmarks",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "We train on the entire mesh, capturing the complex dynamics of facial expres-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "sions, including the finest details, drawing inspiration from [40]. This holistic",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "approach, utilizing the comprehensive deformation mesh d i = x i \u2212 x 0 for each",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "frame i , surpasses both traditional blendshape-based techniques [10,12] and land-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "marks based methods [33]. Traditional techniques often fail to represent extreme",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "deformations due to their linear limitations. In contrast, while landmark-based",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "methods capture a significant portion of facial motions through a set of land-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "marks, they may overlook the fine details of facial dynamics. It is worth noting",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "that even though the methodologies presented in [33] yield mesh displacements,",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "their core training still relies on sparse landmarks.",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "Consistent Noise Sampling",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "While the conditioning of the diffusion process on the expression stage might im-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "pose some sort of temporal coherence, it is by no means enough for the smooth-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "ness required for expression animation. To bridge this gap, building on the ideas",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "presented in [26,29,57], we propose a modification of the original DDPM sam-",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "pling algorithm for our problem, named consistent noise sampling, rooted in two",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "primary observations.",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "Firstly, within the diffusion process, noise drives sample diversity. However,",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "in facial expression animation, maintaining temporal coherence requires careful",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "management of this diversity, as it can otherwise hinder it. To tackle this issue,",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "we propose employing a consistent noise strategy across all animation frames",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "to ensure smooth transitions, acknowledging the minimal differences typically",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "present between consecutive frames. This approach involves applying consistent",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "noise both at the start of denoising and throughout the following denoising",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "steps, ensuring that each frame within an animation maintains coherence. By",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "sampling and maintaining a consistent initial noise implementation \u03f5 \u223cN ( 0 , I )",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "and noise sequence for denoising z = z t \u223cN ( 0 , I ) , t = T \u2212 1 , . . . , 1 with z 0 = 0",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "across frames, our model effectively differentiates its output based on the specific",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "expression stage information, ensuring smooth animations.",
+      "page": 7
+    },
+    {
+      "level": "H4",
+      "text": "Secondly, in diffusion models, generation progresses step-wise in a hierarchical",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "manner: earlier timesteps address broader structures, while later steps refine",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "details, such as expression dynamics. Therefore, our method applies the full",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "range of denoising steps t = T \u2212 1 , . . . , 0 for the generation of the first frame of",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "an animation and then reduces steps for the following frames. To implement our",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "approach, we first apply the full range of denoising steps, t = T \u2212 1 , . . . , 0 , for",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "generating the initial frame of an animation. Once we reach a late-stage denoised",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "version at timestep t s for the first frame, denoted as  \u02c6",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "generation of subsequent frames from this advanced denoised state utilizing only",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "the remaining range of timesteps t = t s , . . . , 0 . This means that the initial noise",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "prediction for the first frame is given by \u02c6 \u03f5 0",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "frames, however, the initial noise prediction adjusts to \u02c6 \u03f5 i",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "t s effectively serving as the new starting point ( T  \u2032 \u2212 1 = t s ) for these frames. This",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "strategic adjustment allows for a more efficient generation process by reducing",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "the number of required timesteps while maintaining high fidelity.",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "To generate diverse animations for the same expression with our sampling",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "strategy, one simply samples different noise implementations and applies them",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "consistently across all frames. A final advantage of our sampling, which might not",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "be evident at the start, is that once the initial frame is generated, all subsequent",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "frames can be produced concurrently, further improving generation speed.",
+      "page": 8
+    },
+    {
+      "level": "H4",
+      "text": "To demonstrate the superiority of our approach over existing methods, we un-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "dertook both quantitative and qualitative experiments focused on 4D facial ex-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "pression animation using the CoMA [41] dataset. This dataset features 12 unique",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "identities, each with 12 varied expressions that are extreme and diverse, making",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "it an ideal benchmark for evaluating 4D facial expression generation methods.",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "Additionally, we applied our approach to the generation of textured 4D fa-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "cial expressions by training on the MimicMe [34] dataset, a large-scale database",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "that provides both geometry and textures. We followed the same training proto-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "col used with CoMA for the geometric data and employed a texture animation",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "method using a latent diffusion model. This allowed us to effectively combine",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "the geometry with texture sequences, producing realistic textured 4D facial ex-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "pressions.",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "4D Facial Expression Evaluation",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "Preprocessing To ensure meaningful comparisons and address the lim-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "itations of [33] which is limited to a fixed frame count per animation, all methods",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "are standardized to produce 40 frames. Following the logic of [33], we select sub-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "sequences that transition from a neutral to an extreme expression and using",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "interpolation or selection, we ensure consistent length for all. Our preprocessing",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "then quantifies the expression progression by calculating deformations from the",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "neutral mesh for each frame of an animation and smoothing it appropriately.",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "Furthermore, we use global scaling for intensity via an animation extremeness",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "factor, which is necessary for customizable approaches such as ours and [40]",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "to grasp expression intensity information. This factor is normalized across ani-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "mations of the same expression, providing a consistent framework of assessing",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "expression intensity. Our preprocessing pipeline, designed to equip the model",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "with both progression and intensity information is versatile enough to be ap-",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "plied to any dataset. For more details, we refer the reader to the supplementary",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "material.",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "Training Setup In contrast to [33], we opted to split the CoMA dataset",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "subject-wise to accurately evaluate the generalization of our method. For the",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "experiments, we follow the settings outlined in [33] and modify the approach",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "described in [40] to accommodate the CoMA dataset. Our diffusion model\u2019s",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "noise schedule uses 1000 steps, starting from t 1 = 1 e \u2212 4 to t T = 0 . 02 . The",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "late denoising strategy is configured with t l = 400 , meaning that for subsequent",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "frames beyond the first, we employ only 400 timesteps, initiating from the late",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "denoised version of the first frame, 400 steps before concluding the diffusion",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "process. Our model was trained for 5600 epochs with a batch size of 32, using",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "the Adam optimizer with an initial learning rate of 0.001 and a learning rate",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "scheduler to finally reduce to 1 e \u2212 4 .",
+      "page": 9
+    },
+    {
+      "level": "H4",
+      "text": "Quantitative Evaluation Given that our training animations transi-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "tion from neutral to extreme states, we expect [33] to inherently learn to generate",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "extreme expressions. To ensure fairness with [33], which isn\u2019t designed for cus-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "tomizable intensity levels, we demonstrate the adaptability of our model. We",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "generate expression animations at maximum intensity through our global inten-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "sity scaling strategy (Ours-Extreme) and, to mitigate bias, also produce anima-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "tions across a spectrum of intensities (Ours-Varying), highlighting our method\u2019s",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "adaptability. Further enhancing comparison fairness, we apply local intensity",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "scaling (Ours-Local), training our model exclusively on expression progression",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "values. This approach simulates a non-customizable framework, closely mirror-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "ing [33], even though it limits the potential of our method. Considering the",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "customizable aspect and significantly worse relative performance of [40], we pair",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "it with global scaling to achieve the best results, ensuring a truly fair comparison",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "between all methods.",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "To quantitatively assess the generated expression animations across all meth-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "ods, we employ the standard metrics. Expression classification is a key bench-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "mark for evaluating 4D facial expression methods. Combining the classifier so-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "lutions presented in [33,40], we adopt a similar approach. Our classifier involves",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "a two-stage process. Initially, we use Principal Component Analysis (PCA) to",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "capture the core variations of facial expressions by encoding deformations from",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "the neutral state. This encoding is applied to all animations used to train the",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "models, resulting in a PCA encoder that effectively reduces the dimensionality",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "of the meshes while preserving their expressive spatial features. Following this,",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "we deploy an LSTM-based classifier that operates on these PCA-encoded anima-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "tions. By processing the temporal sequence of PCA-encoded mesh deformations,",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "our LSTM model effectively captures the dynamic nature of facial expressions.",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "The LSTM output is then sequentially fed through two fully connected layers,",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "with the final layer responsible for class prediction. The second metric utilized",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "for evaluation is the specificity measure, defined as the per-frame average Eu-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "clidean distance between the generated animations and the ground truth. This",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "metric serves as an estimate of how closely the generated animations resemble",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "the actual ones, thus acting as a direct indicator of generation quality. When",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "combined with classification accuracy, these metrics together provide a compre-",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "hensive framework for the quantitative analysis of 4D facial expressions.",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "For all subsequent experiments involving our method and MO3DGAN [33],",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "we generate 50 animations per subject and expression due to their stochastic",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "nature. In contrast, for the deterministic LSTM approach [40], only a single",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "animation is produced for each subject and expression.",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "As can be seen in Tab. 1, our method surpasses the other two methods across",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "both metrics, demonstrating its superiority. Remarkably, it achieves a similar",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "classification performance with the ground truth, underscoring the quality of our",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "generated expressions. In more detail, the specificity error increases for the final",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "frames, as shown in Fig. 3, because these frames correspond to the most extreme",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "expressions. Despite this, every version of our method consistently shows lower",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "error, particularly in these challenging later frames, highlighting our method\u2019s",
+      "page": 10
+    },
+    {
+      "level": "H4",
+      "text": "capability to accurately generate complex and extreme expressions. To further",
+      "page": 11
+    },
+    {
+      "level": "H4",
+      "text": "reinforce our argument about our method\u2019s effectiveness in capturing extreme",
+      "page": 11
+    },
+    {
+      "level": "H4",
+      "text": "expressions, we include heatmaps in Fig. 4, clearly showcasing our method\u2019s",
+      "page": 11
+    },
+    {
+      "level": "H4",
+      "text": "preeminence.",
+      "page": 11
+    },
+    {
+      "level": "H4",
+      "text": "Qualitative Evaluation Beyond quantitative analysis, we offer qual-",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "itative results for a deeper, subjective evaluation. Due to space constraints, we",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "qualitatively compare with the best-performing method. Fig. 5 showcases gener-",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "ations of extreme expression animations from both methods for a visual compar-",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "ison. Our method excels by producing more extreme and expressive animations,",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "highlighting our capability to generate high-fidelity expressions. Additionally, as",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "illustrated in Fig. 6, our method produces animations of high smoothness. Fi-",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "nally, our model excels in creating highly diverse expression animations, with",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "Fig. 7 showcasing examples from the expression categories with the greatest",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "inherent diversity.",
+      "page": 12
+    },
+    {
+      "level": "H4",
+      "text": "Textured 4D Animation on Large Scale Datasets",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "In our final experiment, we implemented a simple extension of our method to",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "generate textured 4D facial expressions using the diverse MimicMe [34] dataset,",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "which includes 4,700 subjects, each performing the same expressions. Despite the",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "dataset\u2019s variety, it poses challenges such as low frame rates and non-uniform",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "expression initiation points, with some animations transitioning directly between",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "expressions without starting from a neutral state. To overcome these issues,",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "we manually annotated and curated a subset of subjects and their expression",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "animations. By interpolating between frames, we increased the frame count for",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "both texture and geometry. Consequently, we created a refined dataset of 345",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "subjects, each demonstrating the six fundamental expressions with 40 frames",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "per expression, ensuring a close match between geometry and texture.",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "Building on the principles of our geometry diffusion model, we implemented",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "a latent diffusion model (LDM) [43] to generate sequences of textures. This ap-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "proach enhances the standard LDM architecture by conditioning it on the neutral",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "latent (i.e., the neutral texture encoded using the LDM\u2019s encoder), expression",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "intensity, and label of the generated frame. The conditioning mechanisms in-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "clude channel-wise concatenation for the neutral latent and cross-attention for",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "the expression intensity and label signals. To ensure a meaningful and represen-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "tative latent space, we trained the autoencoder component of the LDM with all",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "textures from the MimicMe [34] dataset.",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "Our training methodology mirrors that of the geometry model, focusing on",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "one frame at a time. This parallel training process ensures a unified learning",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "strategy across both geometry and texture models. For inference, we employ",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "the same consistent noise sampling strategy as used in the geometry model,",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "which has also proven effective for animating textures in our context. Addition-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "ally, by utilizing a dataset significantly larger than CoMA\u2019s [41] 12 subjects, we",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "have equipped the geometry diffusion model with identity information. This is",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "achieved by encoding the neutral mesh using a spiral convolutional encoder [8,20]",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "that is trained jointly with the diffusion model. The resulting encoding, concate-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "nated with the other conditioning inputs, guides the reverse diffusion process,",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "effectively integrating identity into the generative process.",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "The resulting framework generates textured 4D facial expressions given ex-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "pression information, a neutral mesh and texture. It achieves this through the",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "application of the geometry model to generate the geometry of the frames and",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "the texture model to create the corresponding textures for each frame. Qualita-",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "tive results of our method are showcased in Fig. 8 for subjective evaluation.",
+      "page": 13
+    },
+    {
+      "level": "H4",
+      "text": "In this work, we introduce AnimateMe, a novel diffusion-based model for fully",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "customizable 4D expression generation. Leveraging our novel mesh diffusion pro-",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "cess with the GNN serving as the denoising model, we facilitate expression gener-",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "ations of high fidelity, significantly surpassing the existing state-of-the-art. Paired",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "with our consistent noise sampling strategy, our model ensures the production",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "of smooth animation sequences. We demonstrated the adaptability of our model",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "by extending it to textured animation This extension signifies our method\u2019s po-",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "tential for application in large-scale databases, offering a unified framework for",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "both geometry and texture modeling. To the best of our knowledge, AnimateMe",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "represents the first 4D method to effectively model extreme expressions, address-",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "ing a challenge that has not been solved as effectively as possible in the existing",
+      "page": 14
+    },
+    {
+      "level": "H4",
+      "text": "literature and the first diffusion model with a GNN as a denoising model.",
+      "page": 14
+    },
+    {
+      "level": "H2",
+      "text": "1. Aneja, S., Thies, J., Dai, A., Nie\u00dfner, M.: Facetalk: Audio-driven motion diffusion",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "2. Azadi, S., Shah, A., Hayes, T., Parikh, D., Gupta, S.: Make-an-animation:",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "3. Baltatzis, V., Potamias, R.A., Ververas, E., Sun, G., Deng, J., Zafeiriou, S.: Neural",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "4. Blanz, V., Vetter, T.: Face recognition based on fitting a 3d morphable model.",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "5. Blanz, V., Vetter, T.: A morphable model for the synthesis of 3d faces. In: Seminal",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "6. Blattmann, A., Rombach, R., Ling, H., Dockhorn, T., Kim, S.W., Fidler, S., Kreis,",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "7. Bouritsas, G., Bokhnyak, S., Ploumpis, S., Bronstein, M., Zafeiriou, S.: Neural 3d",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "8. Bouritsas, G., Bokhnyak, S., Ploumpis, S., Bronstein, M., Zafeiriou, S.: Neural 3d",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "9. Bouzid, H., Ballihi, L.: Facial expression video generation based-on spatio-temporal",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "10. Cao, C., Weng, Y., Zhou, S., Tong, Y., Zhou, K.: Facewarehouse: A 3d facial expres-",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "11. Chen, X., Jiang, B., Liu, W., Huang, Z., Fu, B., Chen, T., Yu, G.: Executing your",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "12. Cheng, S., Kotsia, I., Pantic, M., Zafeiriou, S.: 4dfab: A large scale 4d database for",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "13. Cudeiro, D., Bolkart, T., Laidlaw, C., Ranjan, A., Black, M.J.: Capture, learning,",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "14. Dabral, R., Mughal, M.H., Golyanik, V., Theobalt, C.: Mofusion: A framework",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "15. Dhariwal, P., Nichol, A.: Diffusion models beat gans on image synthesis. Advances",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "16. Du, Y., Kips, R., Pumarola, A., Starke, S., Thabet, A., Sanakoyeu, A.: Avatars grow",
+      "page": 15
+    },
+    {
+      "level": "H2",
+      "text": "17. Egger, B., Smith, W.A., Tewari, A., Wuhrer, S., Zollhoefer, M., Beeler, T., Bernard,",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "18. Fan, L., Huang, W., Gan, C., Huang, J., Gong, B.: Controllable image-to-video",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "19. Fan, Y., Lin, Z., Saito, J., Wang, W., Komura, T.: Faceformer: Speech-driven 3d",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "20. Gong, S., Chen, L., Bronstein, M., Zafeiriou, S.: Spiralnet++: A fast and highly ef-",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "21. He, Y., Yang, T., Zhang, Y., Shan, Y., Chen, Q.: Latent video diffusion models for",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "22. Ho, J., Chan, W., Saharia, C., Whang, J., Gao, R., Gritsenko, A., Kingma, D.P.,",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "23. Ho, J., Jain, A., Abbeel, P.: Denoising diffusion probabilistic models. Advances in",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "24. Ho, J., Salimans, T., Gritsenko, A., Chan, W., Norouzi, M., Fleet, D.J.: Video",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "25. Karras, T., Aila, T., Laine, S., Herva, A., Lehtinen, J.: Audio-driven facial ani-",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "26. Khachatryan, L., Movsisyan, A., Tadevosyan, V., Henschel, R., Wang, Z.,",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "27. Li, J., Wu, J., Liu, C.K.: Object motion guided human motion synthesis. ACM",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "28. Luo, S., Hu, W.: Diffusion probabilistic models for 3d point cloud generation.",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "29. Luo, Z., Chen, D., Zhang, Y., Huang, Y., Wang, L., Shen, Y., Zhao, D., Zhou, J.,",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "30. Lyu, Z., Wang, J., An, Y., Zhang, Y., Lin, D., Dai, B.: Controllable mesh generation",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "31. Ma, Z., Zhu, X., Qi, G., Qian, C., Zhang, Z., Lei, Z.: Diffspeaker: Speech-driven",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "32. Otberdout, N., Daoudi, M., Kacem, A., Ballihi, L., Berretti, S.: Dynamic facial ex-",
+      "page": 16
+    },
+    {
+      "level": "H2",
+      "text": "33. Otberdout, N., Ferrari, C., Daoudi, M., Berretti, S., Bimbo, A.D.: Sparse to dense",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "34. Papaioannou, A., Gecer, B., Cheng, S., Chrysos, G., Deng, J., Fotiadou, E., Kam-",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "35. Park, I., Cho, J.: Said: Speech-driven blendshape facial animation with diffusion.",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "36. Peng, Z., Wu, H., Song, Z., Xu, H., Zhu, X., He, J., Liu, H., Fan, Z.: Emotalk:",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "37. Pham, H.X., Cheung, S., Pavlovic, V.: Speech-driven 3d facial animation with",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "38. Ploumpis, S., Ververas, E., O\u2019Sullivan, E., Moschoglou, S., Wang, H., Pears, N.,",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "39. Ploumpis, S., Wang, H., Pears, N., Smith, W.A., Zafeiriou, S.: Combining 3d",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "40. Potamias, R.A., Zheng, J., Ploumpis, S., Bouritsas, G., Ververas, E., Zafeiriou, S.:",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "41. Ranjan, A., Bolkart, T., Sanyal, S., Black, M.J.: Generating 3d faces using convolu-",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "42. Richard, A., Zollh\u00f6fer, M., Wen, Y., de la Torre, F., Sheikh, Y.: Meshtalk: 3d face",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "43. Rombach, R., Blattmann, A., Lorenz, D., Esser, P., Ommer, B.: High-resolution",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "44. Shafir, Y., Tevet, G., Kapon, R., Bermano, A.H.: Human motion diffusion as a",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "45. Singer, U., Polyak, A., Hayes, T., Yin, X., An, J., Zhang, S., Hu, Q., Yang, H.,",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "46. Song, J., Meng, C., Ermon, S.: Denoising diffusion implicit models (2022)",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "47. Song, Y., Sohl-Dickstein, J., Kingma, D.P., Kumar, A., Ermon, S., Poole, B.: Score-",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "48. Stan, S., Haque, K.I., Yumak, Z.: Facediffuser: Speech-driven 3d facial animation",
+      "page": 17
+    },
+    {
+      "level": "H2",
+      "text": "49. Tevet, G., Raab, S., Gordon, B., Shafir, Y., Cohen-Or, D., Bermano, A.H.: Human",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "50. Thambiraja, B., Aliakbarian, S., Cosker, D., Thies, J.: 3diface: Diffusion-based",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "51. Thambiraja, B., Habibie, I., Aliakbarian, S., Cosker, D., Theobalt, C., Thies, J.:",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "52. Tran, L., Liu, X.: Nonlinear 3d face morphable model. In: Proceedings of the IEEE",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "53. Tulyakov, S., Liu, M.Y., Yang, X., Kautz, J.: Mocogan: Decomposing motion and",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "54. Tzirakis, P., Papaioannou, A., Lattas, A., Tarasiou, M., Schuller, B., Zafeiriou,",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "55. Vahdat, A., Williams, F., Gojcic, Z., Litany, O., Fidler, S., Kreis, K., et al.: Lion:",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "56. Wang, Y., Bilinski, P., Bremond, F., Dantcheva, A.: G3an: Disentangling appear-",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "57. Wu, C.H., De la Torre, F.: A latent space of stochastic diffusion models for zero-",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "58. Wu, X., Zhang, Q., Wu, Y., Wang, H., Li, S., Sun, L., Li, X.: F3a-gan: Facial flow",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "59. Xing, J., Xia, M., Zhang, Y., Cun, X., Wang, J., Wong, T.T.: Codetalker: Speech-",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "60. Zhang, F., Ji, N., Gao, F., Li, Y.: Diffmotion: Speech-driven gesture synthesis using",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "61. Zhang, M., Cai, Z., Pan, L., Hong, F., Guo, X., Yang, L., Liu, Z.: Motiondiffuse:",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "62. Zhou, D., Wang, W., Yan, H., Lv, W., Zhu, Y., Feng, J.: Magicvideo: Efficient",
+      "page": 18
+    },
+    {
+      "level": "H2",
+      "text": "63. Zhou, L., Du, Y., Wu, J.: 3d shape generation and completion through point-voxel",
+      "page": 18
+    },
+    {
+      "level": "H3",
+      "text": "Additional Implementation Details",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "To standardize animations to a uniform 40 frames, we employ a combination of",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "selection and interpolation techniques. For sequences exceeding 40 frames, we",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "select the most distinct frames in terms of their differences from consecutive",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "frames. On the other hand, for sequences with fewer than 40 frames, we employ",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "interpolation between the frames that exhibit the greatest differences, thereby",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "seamlessly expanding to the required frame count.",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "Regarding the extremeness factors, they are derived by calculating defor-",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "mations at key facial landmarks from neutral to apex frames for each anima-",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "tion. These factors are then normalized against the maximum extremeness factor",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "within the same expression category, as mentioned in the main paper.",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "Dataset Splitting Selection",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "Regarding dataset splitting, our approach diverges from that of [33]. Whereas",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "[33] utilizes the first subsequence from each subject and expression from their",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "divided subsequences for training and allocate the rest for testing, we adopt",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "the split methodology from the subject-independent CoMA [41] experiments.",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "This involves training on nine identities and testing on three, encompassing all",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "their expression animations. This decision was made to ensure the model remains",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "unexposed to the specific landmarks or deformation patterns of the test identities",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "during training, thus avoiding potential overfitting. Ideally, the models should",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "be completely unfamiliar with the test data to ensure fair evaluation conditions.",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "Therefore, our choice aligns with the goals of evaluating model generalizability,",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "offering a more accurate measure of its performance on unseen data.",
+      "page": 19
+    },
+    {
+      "level": "H3",
+      "text": "Consistent Noise Sampling Algorithm",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "For the sake of completeness, we also provide the analytical algorithm for con-",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "sistent noise sampling, ensuring that the notation remains consistent with that",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "used in the main paper.",
+      "page": 19
+    },
+    {
+      "level": "H4",
+      "text": "Algorithm 1 Consistent Noise Sampling",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "Besides transitioning from an MLP to an SCN for the denoising model ar-",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "chitecture, additional adjustments have been implemented to optimize mesh",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "generation. The model is enhanced through the integration of learnable index",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "embeddings with a small dimensionality, which are added to the point clouds",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "as additional features for each point. These embeddings not only improve the",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "smoothness of the generated point clouds but also assist with the maintenance",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "of the mesh\u2019s connectivity. Further refinement is achieved with the use of learn-",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "able timestep embeddings of increased dimensions. This adaptation allows for",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "the capture of complex patterns essential for the success of the diffusion process.",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "Additionally, the architecture is designed to prioritize the preservation of details",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "and the recognition of complex patterns in 3D data. It features an increase in",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "both the number of filters and the sequence length progressively deeper into the",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "network. This strategy ensures a hierarchical representation of the data, enabling",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "the capture of increasingly abstract and complex features. Finally, to maintain",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "the complexity and detail of the 3D mesh data across all layers, the architec-",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "ture avoids downsampling. This decision ensures that no vital information is lost",
+      "page": 20
+    },
+    {
+      "level": "H4",
+      "text": "throughout the denoising process.",
+      "page": 20
+    },
+    {
+      "level": "H3",
+      "text": "Additional Qualitative Results",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "We provide additional qualitative results to showcase the diversity of the gener-",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "ated expressions of our model. Please note that we only provide the last frame",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "of the expression animations.",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "We acknowledge that while our method represents a significant advancement",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "in the generation of 4D facial expressions, surpassing previous works, it is not",
+      "page": 21
+    },
+    {
+      "level": "H4",
+      "text": "without its limitations. Firstly, our approach is inherently conditioned on an",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "expression progression signal. This conditioning, despite enabling customizable",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "generation, is not ideal due to its restrictive nature. Future iterations of our",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "work could benefit from exploring additional conditioning options to enhance",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "versatility. Secondly, our method\u2019s reliance on mesh representations, stemming",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "from the use of a Graph Neural Network (GNN) based denoising model, lim-",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "its its applicability to other 3D representation forms. This specialization, while",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "effective, narrows the scope of our method\u2019s utility. Thirdly, the adoption of a",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "diffusion approach inherently slows down our method, a drawback that becomes",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "more pronounced with larger meshes. Nevertheless, in our textured experiment,",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "downsampling high-resolution meshes (nearly 28K vertices) prior to processing",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "and then upsampling the results has proven effective in mitigating speed issues.",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "Future work could explore integrating DDIM [46] sampling with our diffusion",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "model to accelerate generation. Additionally, while not a primary concern, the",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "generation speed of our texture LDM [43] also presents challenges. However, by",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "employing DDIM sampling with just 200 timesteps, we achieved very good re-",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "sults. Looking ahead, conditioning the LDM on the geometry of each frame could",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "significantly enhance the coherence between generated textures and geometries,",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "marking a direction for future research.",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "Our method animates static facial meshes to match specific expressions, opening",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "up new possibilities in digital media. However, it also presents ethical challenges,",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "particularly concerning misuse and consent. The ease with which our method",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "can animate faces raises concerns about its potential use in creating deepfakes.",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "These manipulated 3D animations can mislead people or harm someone\u2019s repu-",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "tation without their permission. Equally important is the issue of consent and",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "ownership. Using someone\u2019s likeness to animate expressions without their clear",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "approval crosses ethical boundaries, especially if those animations are used in",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "ways the person wouldn\u2019t agree with. These ethical considerations highlight the",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "need for clear guidelines and consent protocols, ensuring that our technology is",
+      "page": 22
+    },
+    {
+      "level": "H4",
+      "text": "used responsibly and respects individual privacy and rights.",
+      "page": 22
+    }
+  ]
+}
